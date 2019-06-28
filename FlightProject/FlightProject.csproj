@@ -51,6 +51,7 @@
     <Compile Include="POCOs\Flight.cs" />
     <Compile Include="POCOs\Ticket.cs" />
     <Compile Include="Exceptions\UnregisteredUserException.cs" />
+    <Compile Include="Exceptions\UnregisteredDataException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

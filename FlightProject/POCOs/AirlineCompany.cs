@@ -1,4 +1,4 @@
-﻿using FlightProject.POCOs;
+﻿using FlightProject.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,19 +21,15 @@ namespace FlightProject
 
         public AirlineCompany(string airlineName, string userName, string password, string originCountry)
         {
-            AirlineName = airlineName;
-            UserName = userName;
-            Password = password;
-            OriginCountry = originCountry;
+            AirlineName = airlineName ?? throw new ArgumentNullException(nameof(airlineName));
+            UserName = userName ?? throw new ArgumentNullException(nameof(userName));
+            Password = password ?? throw new ArgumentNullException(nameof(password));
+            OriginCountry = originCountry ?? throw new ArgumentNullException(nameof(originCountry));
         }
 
-        public AirlineCompany(int id, string airlineName, string userName, string password, string originCountry)
+        public AirlineCompany(int id, string airlineName, string userName, string password, string originCountry) : this(airlineName, userName, password, originCountry)
         {
             Id = id;
-            AirlineName = airlineName;
-            UserName = userName;
-            Password = password;
-            OriginCountry = originCountry;
         }
 
         public static bool operator ==(AirlineCompany airlineCompany1, AirlineCompany airlineCompany2) => airlineCompany1.Equals(airlineCompany2);
@@ -54,11 +50,7 @@ namespace FlightProject
 
         public override int GetHashCode()
         {
-            if (this.Id == 0)
-            {
-                throw new UnregisteredUserException();
-            }
-            return 200 + Id;
+            return 2000000 + Id.GetHashCode();
         }
     }
 }

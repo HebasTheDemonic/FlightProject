@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlightProject.Exceptions;
 
 namespace FlightProject.POCOs
 {
@@ -18,15 +19,13 @@ namespace FlightProject.POCOs
 
         public Administrator(string username, string password)
         {
-            Username = username;
-            Password = password;
+            Username = username ?? throw new ArgumentNullException(nameof(username));
+            Password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
-        public Administrator(int id, string username, string password)
+        public Administrator(int id, string username, string password) : this(username, password)
         {
             Id = id;
-            Username = username;
-            Password = password;
         }
 
         public static bool operator ==(Administrator administrator1, Administrator administrator2) => administrator1.Equals(administrator2);
@@ -46,11 +45,7 @@ namespace FlightProject.POCOs
 
         public override int GetHashCode()
         {
-            if (this.Id == 0)
-            {
-                throw new UnregisteredUserException();
-            }
-            return 100 + Id;
+            return 1000000 + Id.GetHashCode();
         }
     }
 }

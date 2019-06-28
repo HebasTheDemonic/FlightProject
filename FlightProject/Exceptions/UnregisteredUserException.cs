@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace FlightProject
+namespace FlightProject.Exceptions
 {
     [Serializable]
     internal class UnregisteredUserException : Exception
