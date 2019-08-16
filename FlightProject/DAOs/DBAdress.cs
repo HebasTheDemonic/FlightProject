@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace FlightProject
 {
-    public interface IUser
+    static internal class DBAdress
     {
-        string UserName { get; set; }
-        string Password { get; set; }
+        static string sqlConnectionString = "data source =.; database = FlightProject; integrated security = true";
     }
 }

@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlightProject
 {
-    public interface IUser
+    class FlyingCenterSystem
     {
-        string UserName { get; set; }
-        string Password { get; set; }
     }
 }

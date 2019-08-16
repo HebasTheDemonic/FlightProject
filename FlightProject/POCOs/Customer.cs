@@ -7,33 +7,37 @@ using FlightProject.Exceptions;
 
 namespace FlightProject.POCOs
 {
-    internal class Customer : IPoco, IUser
+    public class Customer : IPoco, IUser
     {
         internal int Id { get; set; }
         internal string FirstName { get; set; }
         internal string LastName { get; set; }
-        internal string UserName { get; set; }
-        internal string Password { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
         internal string Address { get; set; }
         internal int PhoneNo { get; set; }
         internal int CreditCardNumber { get; set; }
 
-        public Customer()
+        internal Customer()
         {
         }
 
-        public Customer(string firstName, string lastName, string userName, string password, string address, int phoneNo, int creditCardNumber)
+        internal Customer(string userName, string password)
+        {
+            UserName = userName ?? throw new ArgumentNullException(nameof(userName));
+            Password = password ?? throw new ArgumentNullException(nameof(password));
+        }
+
+        internal Customer(string firstName, string lastName, string userName, string password, string address, int phoneNo, int creditCardNumber) : this (userName, password)
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
-            UserName = userName ?? throw new ArgumentNullException(nameof(userName));
-            Password = password ?? throw new ArgumentNullException(nameof(password));
             Address = address ?? throw new ArgumentNullException(nameof(address));
             PhoneNo = phoneNo;
             CreditCardNumber = creditCardNumber;
         }
 
-        public Customer(int iD, string firstName, string lastName, string userName, string password, string address, int phoneNo, int creditCardNumber) : this (firstName, lastName, userName, password, address, phoneNo, creditCardNumber)
+        internal Customer(int iD, string firstName, string lastName, string userName, string password, string address, int phoneNo, int creditCardNumber) : this (firstName, lastName, userName, password, address, phoneNo, creditCardNumber)
         {
             Id = iD;
         }

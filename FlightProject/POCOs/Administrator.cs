@@ -7,23 +7,27 @@ using FlightProject.Exceptions;
 
 namespace FlightProject.POCOs
 {
-    internal class Administrator : IPoco, IUser
+    public class Administrator : IPoco, IUser
     {
         internal int Id { get; set; }
-        internal string Username { get; set; }
-        internal string Password { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
 
-        public Administrator()
+        internal Administrator()
         {
         }
 
-        public Administrator(string username, string password)
+        // This constructor is for registering new administrators and for making an Administrator object for login service.
+
+        internal Administrator(string username, string password)
         {
-            Username = username ?? throw new ArgumentNullException(nameof(username));
+            UserName = username ?? throw new ArgumentNullException(nameof(username));
             Password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
-        public Administrator(int id, string username, string password) : this(username, password)
+        // This constructor is for an Administrator object pulled from the database.
+
+        internal Administrator(int id, string username, string password) : this(username, password)
         {
             Id = id;
         }
@@ -35,12 +39,12 @@ namespace FlightProject.POCOs
         public override bool Equals(object obj)
         {
             var administrator = obj as Administrator;
-            if (Username == null || administrator.Username == null)
+            if (UserName == null || administrator.UserName == null)
             {
                 throw new CorruptedDataException();
             }
             return administrator != null &&
-                   Username == administrator.Username;
+                   UserName == administrator.UserName;
         }
 
         public override int GetHashCode()

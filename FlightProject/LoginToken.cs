@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace FlightProject
 {
-    public interface IUser
+    public class LoginToken<T> where T : IUser
     {
-        string UserName { get; set; }
-        string Password { get; set; }
+        public T user { get; set; }
     }
 }

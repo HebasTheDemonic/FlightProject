@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlightProject
+namespace FlightProject.DAOs
 {
-    public interface IUser
+    internal interface ITicketDAO : IBasicDAO<POCOs.Ticket>
     {
-        string UserName { get; set; }
-        string Password { get; set; }
     }
 }

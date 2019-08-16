@@ -5,29 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlightProject
+namespace FlightProject.POCOs
 {
-    internal class AirlineCompany : IPoco, IUser
+    public class AirlineCompany : IPoco, IUser
     {
         internal int Id { get; set; }
         internal string AirlineName { get; set; }
-        internal string UserName { get; set; }
-        internal string Password { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
         internal string OriginCountry { get; set; }
 
-        public AirlineCompany()
+        internal AirlineCompany()
         {
         }
 
-        public AirlineCompany(string airlineName, string userName, string password, string originCountry)
+        internal AirlineCompany(string userName, string password)
         {
-            AirlineName = airlineName ?? throw new ArgumentNullException(nameof(airlineName));
             UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             Password = password ?? throw new ArgumentNullException(nameof(password));
+        }
+
+        internal AirlineCompany(string airlineName, string userName, string password, string originCountry) : this (userName, password)
+        {
+            AirlineName = airlineName ?? throw new ArgumentNullException(nameof(airlineName));
             OriginCountry = originCountry ?? throw new ArgumentNullException(nameof(originCountry));
         }
 
-        public AirlineCompany(int id, string airlineName, string userName, string password, string originCountry) : this(airlineName, userName, password, originCountry)
+        internal AirlineCompany(int id, string airlineName, string userName, string password, string originCountry) : this(airlineName, userName, password, originCountry)
         {
             Id = id;
         }

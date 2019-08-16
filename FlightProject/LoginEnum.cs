@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace FlightProject
 {
-    public interface IUser
+    public enum LoginEnum
     {
-        string UserName { get; set; }
-        string Password { get; set; }
+        ADMINISTRATOR = 1,
+        AIRLINE = 2,
+        CUSTOMER = 3
     }
 }
