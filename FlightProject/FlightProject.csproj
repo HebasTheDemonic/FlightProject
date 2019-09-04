@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,27 +46,30 @@
     <Compile Include="DAOs\AirlineDAOMSSQL.cs" />
     <Compile Include="DAOs\CountryDAOMSSQL.cs" />
     <Compile Include="DAOs\CustomerDAOMSSQL.cs" />
-    <Compile Include="DAOs\DBAdress.cs" />
     <Compile Include="DAOs\FlightDAOMSSQL.cs" />
+    <Compile Include="DAOs\GeneralDAOMSSQL.cs" />
     <Compile Include="DAOs\IAdministratorDAO.cs" />
     <Compile Include="DAOs\IAirlineDAO.cs" />
     <Compile Include="DAOs\IBasicDAO.cs" />
     <Compile Include="DAOs\ICountryDAO.cs" />
     <Compile Include="DAOs\ICustomerDAO.cs" />
     <Compile Include="DAOs\IFlightDAO.cs" />
-    <Compile Include="DAOs\ILoginDAO.cs" />
+    <Compile Include="DAOs\IGeneralDAO.cs" />
     <Compile Include="DAOs\ITicketDAO.cs" />
-    <Compile Include="DAOs\LoginDAOMSSQL.cs" />
     <Compile Include="DAOs\TicketDAOMSSQL.cs" />
+    <Compile Include="Exceptions\UnauthorisedActionException.cs" />
     <Compile Include="Facades\AnonymousUserFacade.cs" />
+    <Compile Include="Exceptions\DataAlreadyExistsException.cs" />
     <Compile Include="Facades\FacadeBase.cs" />
     <Compile Include="Facades\IAnonymousUserFacade.cs" />
     <Compile Include="Facades\ILoggedInAdministratorFacade.cs" />
-    <Compile Include="Facades\ILoggedInAirlineFacede.cs" />
+    <Compile Include="Facades\ILoggedInAirlineFacade.cs" />
     <Compile Include="Facades\ILoggedInCustomerFacade.cs" />
     <Compile Include="Facades\LoggedInAdministratorFacade.cs" />
     <Compile Include="Facades\LoggedInAirlineFacade.cs" />
     <Compile Include="Facades\LoggedInCustomerFacade.cs" />
+    <Compile Include="Exceptions\NullResultException.cs" />
+    <Compile Include="Exceptions\UserAlreadyExistsException.cs" />
     <Compile Include="FlyingCenterSystem.cs" />
     <Compile Include="ILoginService.cs" />
     <Compile Include="LoginEnum.cs" />
@@ -84,8 +88,12 @@
     <Compile Include="Exceptions\UnregisteredDataException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Exceptions\UserNotFoundException.cs" />
-    <Compile Include="WrongPasswordException.cs" />
+    <Compile Include="Exceptions\WrongPasswordException.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,11 +10,12 @@ namespace FlightProject
 {
     public class LoginService : ILoginService
     {
-        internal DAOs.ILoginDAO _loginDAO;
+        internal DAOs.IGeneralDAO _genaralDAO;
         internal DAOs.IAdministratorDAO _administratorDAO;
         internal DAOs.IAirlineDAO _airlineDAO;
         internal DAOs.ICustomerDAO _customerDAO;
-        
+        internal int FacadeIndex { get; }
+
         public LoginService(string username, string password)
         {
             LoginEnum loginEnum = TryLogin(username);
@@ -26,7 +27,7 @@ namespace FlightProject
                         LoginToken<Administrator> loginToken = new LoginToken<Administrator>();
                         if (AdminLogin(username, password, out loginToken))
                         {
-                            throw new NotImplementedException();
+                            FacadeIndex = FlyingCenterSystem.GetFacade(loginToken);
                         }
                         return;
                     }
@@ -35,7 +36,7 @@ namespace FlightProject
                         LoginToken<AirlineCompany> loginToken = new LoginToken<AirlineCompany>();
                         if (AirlineLogin(username, password, out loginToken))
                         {
-                            throw new NotImplementedException();
+                           FacadeIndex = FlyingCenterSystem.GetFacade(loginToken);
                         }
                         return;
                     }
@@ -44,7 +45,7 @@ namespace FlightProject
                         LoginToken<Customer> loginToken = new LoginToken<Customer>();
                         if (CustomerLogin(username, password, out loginToken))
                         {
-                            throw new NotImplementedException();
+                           FacadeIndex = FlyingCenterSystem.GetFacade(loginToken);
                         }
                         return;
                     }
@@ -58,8 +59,8 @@ namespace FlightProject
         public LoginEnum TryLogin(string userName)
         {
             int loginValue = 0;
-            _loginDAO = new DAOs.LoginDAOMSSQL();
-            loginValue = _loginDAO.TryLogin(userName, loginValue);
+            _genaralDAO = new DAOs.GeneralDAOMSSQL();
+            loginValue = _genaralDAO.DoesUsernameExist(userName);
             switch (loginValue)
             {
                 case 1:
@@ -76,7 +77,7 @@ namespace FlightProject
                     }
                 default:
                     {
-                        throw new UserNotFoundException();
+                        throw new UserNotFoundException("Username not found in system");
                     }
             }
 
@@ -90,7 +91,7 @@ namespace FlightProject
             if (password == administrator.Password)
             {
                 loginToken = new LoginToken<Administrator>();
-                loginToken.user = administrator;
+                loginToken.User = administrator;
                 return true;
             }
 
@@ -105,7 +106,7 @@ namespace FlightProject
             if (password == airlineCompany.Password)
             {
                 loginToken = new LoginToken<AirlineCompany>();
-                loginToken.user = airlineCompany;
+                loginToken.User = airlineCompany;
                 return true;
             }
 
@@ -120,7 +121,7 @@ namespace FlightProject
             if (password == customer.Password)
             {
                 loginToken = new LoginToken<Customer>();
-                loginToken.user = customer;
+                loginToken.User = customer;
                 return true;
             }
 
