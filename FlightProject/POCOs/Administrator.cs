@@ -9,17 +9,17 @@ namespace FlightProject.POCOs
 {
     public class Administrator : IPoco, IUser
     {
-        internal int Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public int Id { get; }
+        public string UserName { get; }
+        public string Password { get; }
 
-        internal Administrator()
+        public Administrator()
         {
         }
 
         // This constructor is for registering new administrators and for making an Administrator object for login service.
 
-        internal Administrator(string username, string password)
+        public Administrator(string username, string password)
         {
             UserName = username ?? throw new ArgumentNullException(nameof(username));
             Password = password ?? throw new ArgumentNullException(nameof(password));

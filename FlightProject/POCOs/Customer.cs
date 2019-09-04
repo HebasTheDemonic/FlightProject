@@ -9,26 +9,26 @@ namespace FlightProject.POCOs
 {
     public class Customer : IPoco, IUser
     {
-        internal int Id { get; set; }
-        internal string FirstName { get; set; }
-        internal string LastName { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        internal string Address { get; set; }
-        internal int PhoneNo { get; set; }
-        internal int CreditCardNumber { get; set; }
+        public int Id { get; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string UserName { get; }
+        public string Password { get; }
+        public string Address { get; }
+        public int PhoneNo { get; }
+        public int CreditCardNumber { get; }
 
-        internal Customer()
+        public Customer()
         {
         }
 
-        internal Customer(string userName, string password)
+        public Customer(string userName, string password)
         {
             UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             Password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
-        internal Customer(string firstName, string lastName, string userName, string password, string address, int phoneNo, int creditCardNumber) : this (userName, password)
+        public Customer(string firstName, string lastName, string userName, string password, string address, int phoneNo, int creditCardNumber) : this (userName, password)
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));

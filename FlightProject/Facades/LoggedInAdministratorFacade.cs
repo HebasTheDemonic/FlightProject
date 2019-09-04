@@ -4,54 +4,213 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlightProject.POCOs;
+using FlightProject.Exceptions;
+using System.Data.SqlClient;
 
 namespace FlightProject.Facades
 {
-    internal class LoggedInAdministratorFacade : AnonymousUserFacade,ILoggedInAdministratorFacade
+    public class LoggedInAdministratorFacade : AnonymousUserFacade, ILoggedInAdministratorFacade
     {
+        public LoginToken<Administrator> LoginToken { get; }
+
+        internal LoggedInAdministratorFacade(LoginToken<Administrator> token)
+        {
+            LoginToken = token;
+            _administratorDAO = new DAOs.AdministratorDAOMSSQL();
+            _airlineDAO = new DAOs.AirlineDAOMSSQL();
+            _customerDAO = new DAOs.CustomerDAOMSSQL();
+            _flightDAO = new DAOs.FlightDAOMSSQL();
+            _ticketDAO = new DAOs.TicketDAOMSSQL();
+            _customerDAO = new DAOs.CustomerDAOMSSQL();
+            _generalDAO = new DAOs.GeneralDAOMSSQL();
+        }
+
         public void CreateNewAdministrator(LoginToken<Administrator> token, Administrator administrator)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                if (token.User.UserName.ToUpper() == "ADMIN")
+                {
+                    if(_generalDAO.DoesUsernameExist(administrator.UserName) == 0)
+                    {
+                        if (_administratorDAO.DoesAdministratorExist(administrator) == 0)
+                        {
+                            _administratorDAO.Add(administrator);
+                            return;
+                        }
+                    }
+                    throw new UserAlreadyExistsException();
+                }
+                else
+                {
+                    throw new UnauthorisedActionException($"Administrator {token.User.UserName} is not allowed to add new administrators");
+                }
+            }
         }
 
         public void CreateNewAirline(LoginToken<Administrator> token, AirlineCompany airline)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                if (_generalDAO.DoesUsernameExist(airline.UserName) == 0)
+                {
+                    if (_airlineDAO.DoesAirlineCompanyExist(airline) == 0)
+                    {
+                        _airlineDAO.Add(airline);
+                    }
+                }
+                throw new UserAlreadyExistsException();
+            }
         }
 
         public void CreateNewCustomer(LoginToken<Administrator> token, Customer customer)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                if (_generalDAO.DoesUsernameExist(customer.UserName) == 0)
+                {
+                    if (_customerDAO.DoesCustomerExist(customer) == 0)
+                    {
+                        _customerDAO.Add(customer);
+                    }
+                }
+                throw new UserAlreadyExistsException();
+            }
         }
 
         public void RemoveAdministrator(LoginToken<Administrator> token, Administrator administrator)
         {
-            throw new NotImplementedException();
+            if (administrator.UserName.ToUpper() == "ADMIN")
+            {
+                throw new UnauthorisedActionException("Cannot remove master administrator account.");
+            }
+            if (token.CheckToken())
+            {
+                if (administrator.UserName == token.User.UserName)
+                {
+                    throw new UnauthorisedActionException("Cannot remove own account.");
+                }
+                administrator = _administratorDAO.GetAdministratorByUsername(administrator.UserName);
+                _administratorDAO.Remove(administrator);
+            }
+
         }
 
         public void RemoveAirline(LoginToken<Administrator> token, AirlineCompany airline)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                if (_airlineDAO.DoesAirlineCompanyExist(airline) == 1)
+                {
+                    airline = _airlineDAO.GetAirlineCompanybyUsername(airline.UserName);
+                    List<Flight> flights = (List<Flight>)_flightDAO.GetFlightsByAirlineCompany(airline);
+                    foreach (Flight flight in flights)
+                    {
+                        List<Ticket> tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flight);
+                        foreach (Ticket ticket in tickets)
+                        {
+                            _ticketDAO.Remove(ticket);
+                        }
+                        _flightDAO.Remove(flight);
+                    }
+                    _airlineDAO.Remove(airline);
+                }
+                else
+                {
+                    throw new UserNotFoundException("Airline does not exist");
+                }
+            }
         }
 
         public void RemoveCustomer(LoginToken<Administrator> token, Customer customer)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                if (_customerDAO.DoesCustomerExist(customer) == 1)
+                {
+                    customer = _customerDAO.GetCustomerByUsername(customer.UserName);
+                    List<Ticket> tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByCustomer(customer);
+                    foreach (Ticket ticket in tickets)
+                    {
+                        _ticketDAO.Remove(ticket);
+                    }
+                    _customerDAO.Remove(customer);
+                }
+                else
+                {
+                    throw new UserNotFoundException("Customer does not exist");
+                }
+            }
         }
 
         public void UpdateAdministrator(LoginToken<Administrator> token, Administrator administrator)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                if (token.User.UserName.ToUpper() == "ADMIN")
+                {
+                    try
+                    {
+                        Administrator tempAdministrator = _administratorDAO.GetAdministratorByUsername(administrator.UserName);
+                        if (tempAdministrator.UserName == null)
+                        {
+                            throw new Exception();
+                        }
+                        administrator = new Administrator(tempAdministrator.Id, administrator.UserName, administrator.Password);
+                    }
+                    catch (Exception)
+                    {
+                        throw new UnauthorisedActionException("Usernames cannot be changed.");
+                    }
+                    _administratorDAO.Update(administrator);
+                }
+                else
+                {
+                    throw new UnauthorisedActionException("Only head administrator can change administrator accounts.");
+                }
+            }
         }
 
         public void UpdateAirlineDetails(LoginToken<Administrator> token, AirlineCompany airline)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                try
+                {
+                    AirlineCompany airlineCompany = _airlineDAO.GetAirlineCompanybyUsername(airline.UserName);
+                    if (airlineCompany.UserName == null)
+                    {
+                        throw new Exception();
+                    }
+                    airline = new AirlineCompany(airlineCompany.Id, airline.AirlineName, airline.UserName, airline.Password, airline.OriginCountry);
+                }
+                catch (Exception)
+                {
+                    throw new UnauthorisedActionException("Usernames cannot be changed.");
+                }
+                _airlineDAO.Update(airline);
+            }
         }
 
         public void UpdateCustomerDetails(LoginToken<Administrator> token, Customer customer)
         {
-            throw new NotImplementedException();
+            if (token.CheckToken())
+            {
+                try
+                {
+                    Customer tempCustomer = _customerDAO.GetCustomerByUsername(customer.UserName);
+                    if (tempCustomer.UserName == null)
+                    {
+                        throw new Exception();
+                    }
+                    customer = new Customer(tempCustomer.Id, customer.FirstName, customer.LastName, customer.UserName, customer.Password, customer.Address, customer.PhoneNo, customer.CreditCardNumber);
+                }
+                catch (Exception)
+                {
+                    throw new UnauthorisedActionException("Usernames cannot be changed.");
+                }
+                    _customerDAO.Update(customer);
+            }
         }
     }
 }

@@ -9,5 +9,6 @@ namespace FlightProject.DAOs
     internal interface IAdministratorDAO : IBasicDAO<POCOs.Administrator>
     {
         POCOs.Administrator GetAdministratorByUsername(string username);
+        int DoesAdministratorExist(POCOs.Administrator administrator);
     }
 }

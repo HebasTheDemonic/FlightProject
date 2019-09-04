@@ -8,7 +8,7 @@ namespace FlightProject
 {
     public interface IUser
     {
-        string UserName { get; set; }
-        string Password { get; set; }
+        string UserName { get; }
+        string Password { get; }
     }
 }

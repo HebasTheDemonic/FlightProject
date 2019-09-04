@@ -9,5 +9,6 @@ namespace FlightProject.DAOs
     internal interface ICustomerDAO : IBasicDAO<POCOs.Customer>
     {
         POCOs.Customer GetCustomerByUsername(string userName);
+        int DoesCustomerExist(POCOs.Customer customer);
     }
 }

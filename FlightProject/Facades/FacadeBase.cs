@@ -7,13 +7,19 @@ using FlightProject.DAOs;
 
 namespace FlightProject.Facades
 {
-    internal abstract class FacadeBase
+    public abstract class FacadeBase
     {
-        protected IAdministratorDAO _administratorDAO;
-        protected IAirlineDAO _airlineDAO;
-        protected ICountryDAO _countryDAO;
-        protected ICustomerDAO _customerDAO;
-        protected IFlightDAO _flightDAO;
-        protected ITicketDAO _ticketDAO;
+        internal IAdministratorDAO _administratorDAO;
+        internal IAirlineDAO _airlineDAO;
+        internal ICountryDAO _countryDAO;
+        internal ICustomerDAO _customerDAO;
+        internal IFlightDAO _flightDAO;
+        internal ITicketDAO _ticketDAO;
+        internal IGeneralDAO _generalDAO;
+
+        protected FacadeBase()
+        {
+
+        }
     }
 }

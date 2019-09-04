@@ -7,10 +7,10 @@ using FlightProject.Exceptions;
 
 namespace FlightProject.POCOs
 {
-    internal class Country : IPoco
+    public class Country : IPoco
     {
-        internal int ID { get; set; }
-        internal string CountryName { get; set; }
+        public int ID { get; }
+        public string CountryName { get; }
 
         public Country()
         {
@@ -21,7 +21,7 @@ namespace FlightProject.POCOs
             CountryName = countryName ?? throw new ArgumentNullException(nameof(countryName));
         }
 
-        public Country(int iD, string countryName) : this(countryName)
+        internal Country(int iD, string countryName) : this(countryName)
         {
             ID = iD;
         }

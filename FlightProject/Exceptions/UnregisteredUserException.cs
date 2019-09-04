@@ -4,17 +4,17 @@ using System.Runtime.Serialization;
 namespace FlightProject.Exceptions
 {
     [Serializable]
-    internal class UnregisteredUserException : Exception
+    public class UnregisteredUserException : Exception
     {
-        public UnregisteredUserException()
+        internal UnregisteredUserException()
         {
         }
 
-        public UnregisteredUserException(string message) : base(message)
+        internal UnregisteredUserException(string message) : base(message)
         {
         }
 
-        public UnregisteredUserException(string message, Exception innerException) : base(message, innerException)
+        internal UnregisteredUserException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

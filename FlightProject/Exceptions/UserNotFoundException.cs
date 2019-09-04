@@ -4,17 +4,17 @@ using System.Runtime.Serialization;
 namespace FlightProject.Exceptions
 {
     [Serializable]
-    internal class UserNotFoundException : Exception
+    public class UserNotFoundException : Exception
     {
-        public UserNotFoundException()
+        internal UserNotFoundException()
         {
         }
 
-        public UserNotFoundException(string message) : base(message)
+        internal UserNotFoundException(string message) : base(message)
         {
         }
 
-        public UserNotFoundException(string message, Exception innerException) : base(message, innerException)
+        internal UserNotFoundException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

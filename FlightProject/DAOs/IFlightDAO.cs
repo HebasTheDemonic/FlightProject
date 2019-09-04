@@ -9,12 +9,13 @@ namespace FlightProject.DAOs
 {
     internal interface IFlightDAO : IBasicDAO <Flight>
     {
-        Dictionary<Flight, int> GetAllFlightsVacancy();
-        Flight GetFlightById(int id);
-        IList<Flight> GetFlightsByOriginCountry(int CountryCode);
+        IList<Flight> GetFlightsByOriginCountry(int countryCode);
         IList<Flight> GetFlightsByDepartureDate(DateTime departureDate);
-        IList<Flight> GetFlightsByLandingTime(DateTime landingDate);
+        IList<Flight> GetFlightsByLandingDate(DateTime landingDate);
         IList<Flight> GetFlightsByCustomer(Customer customer);
         IList<Flight> GetFlightsByAirlineCompany(AirlineCompany airline);
+        IList<Flight> GetFlightsByDestinationCountry(int countryCode);
+        int CheckRemainingSeatsOnFlight(int flightId);
+        int DoesFlightExist(int id);
     }
 }

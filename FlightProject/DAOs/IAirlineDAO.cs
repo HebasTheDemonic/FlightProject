@@ -9,6 +9,7 @@ namespace FlightProject.DAOs
     internal interface IAirlineDAO : IBasicDAO <POCOs.AirlineCompany>
     {
         POCOs.AirlineCompany GetAirlineCompanybyUsername(string userName);
-        POCOs.AirlineCompany GetAllAirlinesByCountry(int countryId);
+        IList<POCOs.AirlineCompany> GetAllAirlinesByCountry(int countryId);
+        int DoesAirlineCompanyExist(POCOs.AirlineCompany airlineCompany);
     }
 }

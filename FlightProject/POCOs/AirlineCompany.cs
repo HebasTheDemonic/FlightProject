@@ -9,29 +9,29 @@ namespace FlightProject.POCOs
 {
     public class AirlineCompany : IPoco, IUser
     {
-        internal int Id { get; set; }
-        internal string AirlineName { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        internal string OriginCountry { get; set; }
+        public int Id { get; }
+        public string AirlineName { get; }
+        public string UserName { get; }
+        public string Password { get; }
+        public int OriginCountry { get; }
 
-        internal AirlineCompany()
+        public AirlineCompany()
         {
         }
 
-        internal AirlineCompany(string userName, string password)
+        public AirlineCompany(string userName, string password)
         {
             UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             Password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
-        internal AirlineCompany(string airlineName, string userName, string password, string originCountry) : this (userName, password)
+        public AirlineCompany(string airlineName, string userName, string password, int originCountry) : this (userName, password)
         {
             AirlineName = airlineName ?? throw new ArgumentNullException(nameof(airlineName));
-            OriginCountry = originCountry ?? throw new ArgumentNullException(nameof(originCountry));
+            OriginCountry = originCountry;
         }
 
-        internal AirlineCompany(int id, string airlineName, string userName, string password, string originCountry) : this(airlineName, userName, password, originCountry)
+        internal AirlineCompany(int id, string airlineName, string userName, string password, int originCountry) : this(airlineName, userName, password, originCountry)
         {
             Id = id;
         }

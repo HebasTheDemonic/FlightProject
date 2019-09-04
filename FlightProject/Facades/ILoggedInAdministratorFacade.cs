@@ -9,6 +9,7 @@ namespace FlightProject.Facades
 {
     interface ILoggedInAdministratorFacade
     {
+        LoginToken<Administrator> LoginToken { get; }
         void CreateNewAirline(LoginToken<Administrator> token, AirlineCompany airline);
         void UpdateAirlineDetails(LoginToken<Administrator> token, AirlineCompany airline);
         void RemoveAirline(LoginToken<Administrator> token, AirlineCompany airline);

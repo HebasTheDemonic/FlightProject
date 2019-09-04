@@ -7,33 +7,33 @@ using FlightProject.Exceptions;
 
 namespace FlightProject.POCOs
 {
-    internal class Flight : IPoco
+    public class Flight : IPoco
     {
-        internal int Id { get; set; }
-        internal int AirlineCompanyId { get; set; }
-        internal int OriginCountryId { get; set; }
-        internal int DestinationCountryId { get; set; }
-        internal string DepartureTime { get; set; }
-        internal string LandingTime { get; set; }
-        internal string FlightStatus { get; set; }
-        internal int TotalTickets { get; set; }
-        internal int RemainingTickets { get; set; }
+        public int Id { get; }
+        public int AirlineCompanyId { get; }
+        public int OriginCountryId { get; }
+        public int DestinationCountryId { get; }
+        public DateTime DepartureTime { get; }
+        public DateTime LandingTime { get; }
+        public string FlightStatus { get; }
+        public int TotalTickets { get; }
+        public int RemainingTickets { get; }
 
         public Flight()
         {
         }
 
-        public Flight(int airlineCompanyId, int originCountryId, int destinationCountryId, string departureTime, string landingTime, int totalTickets)
+        public Flight(int airlineCompanyId, int originCountryId, int destinationCountryId, DateTime departureTime, DateTime landingTime, int totalTickets)
         {
             AirlineCompanyId = airlineCompanyId;
             OriginCountryId = originCountryId;
             DestinationCountryId = destinationCountryId;
-            DepartureTime = departureTime ?? throw new ArgumentNullException(nameof(departureTime));
-            LandingTime = landingTime ?? throw new ArgumentNullException(nameof(landingTime));
+            DepartureTime = departureTime;
+            LandingTime = landingTime;
             TotalTickets = totalTickets;
         }
 
-        public Flight(int id, int airlineCompanyId, int originCountryId, int destinationCountryId, string departureTime, string landingTime, string flightStatus, int totalTickets, int remainingTickets) : this (airlineCompanyId, originCountryId, destinationCountryId, departureTime, landingTime, totalTickets)
+        public Flight(int id, int airlineCompanyId, int originCountryId, int destinationCountryId, DateTime departureTime, DateTime landingTime, string flightStatus, int totalTickets, int remainingTickets) : this (airlineCompanyId, originCountryId, destinationCountryId, departureTime, landingTime, totalTickets)
         {
             Id = id;
             FlightStatus = flightStatus ?? throw new ArgumentNullException(nameof(flightStatus));
@@ -48,7 +48,7 @@ namespace FlightProject.POCOs
         {
             var flight = obj as Flight;
             return flight != null &&
-                   AirlineCompanyId == flight.AirlineCompanyId &&
+                   AirlineCompanyId == flight.Id &&
                    OriginCountryId == flight.OriginCountryId &&
                    DestinationCountryId == flight.DestinationCountryId;
         }

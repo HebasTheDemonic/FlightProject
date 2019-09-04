@@ -4,17 +4,17 @@ using System.Runtime.Serialization;
 namespace FlightProject.Exceptions
 {
     [Serializable]
-    internal class CorruptedDataException : Exception
+    public class CorruptedDataException : Exception
     {
-        public CorruptedDataException()
+        internal CorruptedDataException()
         {
         }
 
-        public CorruptedDataException(string message) : base(message)
+        internal CorruptedDataException(string message) : base(message)
         {
         }
 
-        public CorruptedDataException(string message, Exception innerException) : base(message, innerException)
+        internal CorruptedDataException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

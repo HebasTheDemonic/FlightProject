@@ -7,11 +7,11 @@ using FlightProject.Exceptions;
 
 namespace FlightProject.POCOs
 {
-    internal class Ticket : IPoco
+    public class Ticket : IPoco
     {
-        internal int Id { get; set; }
-        internal int FlightId { get; set; }
-        internal int CustomerId { get; set; }
+        public int Id { get; }
+        public int FlightId { get; }
+        public int CustomerId { get; }
 
         public Ticket()
         {
@@ -23,9 +23,9 @@ namespace FlightProject.POCOs
             CustomerId = customerId;
         }
 
-        public Ticket(int id, int flightId, int customerId) : this(id, flightId)
+        internal Ticket(int id, int flightId, int customerId) : this(flightId, customerId)
         {
-            CustomerId = customerId;
+            Id = id;
         }
 
         public static bool operator ==(Ticket ticket, Ticket ticket1) => ticket.Equals(ticket1);

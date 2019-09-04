@@ -9,8 +9,9 @@ namespace FlightProject.Facades
 {
     interface ILoggedInCustomerFacade
     {
+        LoginToken<Customer> LoginToken { get; }
         IList<Flight> GetAllMyFlights(LoginToken<Customer> token);
-        Ticket PurchaseTicket(LoginToken<Customer> token, Flight flight);
+        Ticket PurchaseTicket(LoginToken<Customer> token, int flightId);
         void CancelTicket(LoginToken<Customer> token, Ticket ticket);
     }
 }
