@@ -12,6 +12,5 @@ namespace FlightProject.DAOs
         void DBTestPrep();
         int DoesUsernameExist(string userName);
         void DBClear();
-        int 
     }
 }
