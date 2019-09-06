@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FlyingCenterSystemTest.cs" />
+    <Compile Include="LoggedInAirlineFacadeTest_Constants.cs" />
     <Compile Include="LoggedInCustomerFacadeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnonymousUserFacadeTest.cs" />
