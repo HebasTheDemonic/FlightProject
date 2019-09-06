@@ -11,7 +11,6 @@ namespace FlightProject.Facades
     {
         IList<Flight> GetAllFlights();
         IList<AirlineCompany> GetAirlineCompanies();
-        Dictionary<Flight, int> GetAllFlightsVacancy();
         Flight GetFlightById(int id);
         IList<Flight> GetFlightsByOriginCountry(int CountryCode);
         IList<Flight> GetFlightsByDepartureDate(DateTime departureDate);
