@@ -86,5 +86,39 @@ namespace FlightProject.DAOs
             }
             return result;
         }
+
+        public int TryLogin(string username)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.Connection = connection;
+                sqlCommand.CommandText = "TRY_LOGIN";
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter usernameParameter = new SqlParameter();
+                usernameParameter.SqlDbType = SqlDbType.Char;
+                usernameParameter.SqlValue = username;
+                usernameParameter.ParameterName = "@USER";
+
+                SqlParameter returnValueParameter = new SqlParameter();
+                returnValueParameter.SqlDbType = SqlDbType.Int;
+                returnValueParameter.Direction = ParameterDirection.Output;
+                returnValueParameter.ParameterName = "@VALUE";
+
+                sqlCommand.Parameters.Add(usernameParameter);
+                sqlCommand.Parameters.Add(returnValueParameter);
+
+                connection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                if (returnValueParameter.Value.GetType() != typeof(DBNull))
+                {
+                    result = Convert.ToInt32(returnValueParameter.Value);
+                }
+                connection.Close();
+            }
+            return result;
+        }
     }
 }
