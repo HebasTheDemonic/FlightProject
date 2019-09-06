@@ -237,7 +237,7 @@ namespace FlightProject.DAOs
 
                 SqlParameter idParameter = new SqlParameter();
                 idParameter.SqlDbType = SqlDbType.Int;
-                idParameter.SqlValue = t.UserName;
+                idParameter.SqlValue = t.Id;
                 idParameter.ParameterName = "@ID";
 
                 SqlParameter usernameParameter = new SqlParameter();
@@ -253,7 +253,7 @@ namespace FlightProject.DAOs
                 SqlParameter firstNameParameter = new SqlParameter();
                 firstNameParameter.SqlDbType = SqlDbType.Char;
                 firstNameParameter.SqlValue = t.FirstName;
-                firstNameParameter.ParameterName = "@NAME";
+                firstNameParameter.ParameterName = "@FIRST";
 
                 SqlParameter lastNameParameter = new SqlParameter();
                 lastNameParameter.SqlDbType = SqlDbType.Char;
@@ -272,7 +272,7 @@ namespace FlightProject.DAOs
 
                 SqlParameter creditCardParameter = new SqlParameter();
                 creditCardParameter.SqlDbType = SqlDbType.Int;
-                creditCardParameter.SqlValue = t.PhoneNo;
+                creditCardParameter.SqlValue = t.CreditCardNumber;
                 creditCardParameter.ParameterName = "@CARD";
 
                 sqlCommand.Parameters.Add(idParameter);
