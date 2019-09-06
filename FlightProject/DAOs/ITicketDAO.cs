@@ -11,7 +11,7 @@ namespace FlightProject.DAOs
     {
         int DoesTicketExistByCustomerAndFlight(Ticket ticket);
         Ticket GetTicketID(Ticket ticket);
-        IList<Ticket> GetAllTicketsByFlight(Flight flight);
+        IList<Ticket> GetAllTicketsByFlight(int flightId);
         IList<Ticket> GetAllTicketsByCustomer(Customer customer);
     }
 }
