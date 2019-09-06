@@ -16,6 +16,7 @@ namespace FlightProject.DAOs
         IList<Flight> GetFlightsByAirlineCompany(AirlineCompany airline);
         IList<Flight> GetFlightsByDestinationCountry(int countryCode);
         int CheckRemainingSeatsOnFlight(int flightId);
-        int DoesFlightExist(int id);
+        int DoesFlightExistByData(Flight flight);
+        int DoesFlightExistById(int id);
     }
 }
