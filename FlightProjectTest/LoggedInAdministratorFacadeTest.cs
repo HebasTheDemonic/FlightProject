@@ -123,7 +123,7 @@ namespace FlightProjectTest
             LoggedInAdministratorFacade administratorFacade = GetAdministratorFacade("Admin", "9999");
             AirlineCompany airline = new AirlineCompany("bek", "7788");
 
-            Assert.ThrowsException<UserNotFoundException>(new Action(() => administratorFacade.RemoveAirline(administratorFacade.LoginToken, airline)));
+            Assert.ThrowsException<UserNotFoundException>(new Action(() => { administratorFacade.RemoveAirline(administratorFacade.LoginToken, airline); }));
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace FlightProjectTest
 
             administratorFacade.RemoveCustomer(administratorFacade.LoginToken, customer);
 
-            Assert.ThrowsException<UserNotFoundException>(new Action(() => UserLogin("coo", "6542")));
+            Assert.ThrowsException<UserNotFoundException>(new Action(() => { UserLogin("coo", "6542"); }));
         }
 
         [TestMethod]
@@ -229,7 +229,12 @@ namespace FlightProjectTest
             int facadeIndex = UserLogin("coo", "555");
             LoggedInCustomerFacade customerFacade = (LoggedInCustomerFacade)FlyingCenterSystem.FacadeList[facadeIndex];
 
-            Assert.AreEqual(customer, customerFacade.LoginToken.User);
+            Assert.AreEqual(customer.Address, customerFacade.LoginToken.User.Address);
+            Assert.AreEqual(customer.CreditCardNumber, customerFacade.LoginToken.User.CreditCardNumber);
+            Assert.AreEqual(customer.FirstName, customerFacade.LoginToken.User.FirstName);
+            Assert.AreEqual(customer.LastName, customerFacade.LoginToken.User.LastName);
+            Assert.AreEqual(customer.Password, customerFacade.LoginToken.User.Password);
+            Assert.AreEqual(customer.PhoneNo, customerFacade.LoginToken.User.PhoneNo);
         }
 
         [TestMethod]
@@ -238,7 +243,7 @@ namespace FlightProjectTest
             LoggedInAdministratorFacade administratorFacade = GetAdministratorFacade("admin", "9999");
             Customer customer = new Customer("foo", "goo", "poo", "555", "ter", 66464, 654321);
 
-            Assert.ThrowsException<UserNotFoundException>(new Action(() => administratorFacade.UpdateCustomerDetails(administratorFacade.LoginToken, customer)));
+            Assert.ThrowsException<UnauthorisedActionException>(new Action(() => administratorFacade.UpdateCustomerDetails(administratorFacade.LoginToken, customer)));
         }
 
         public LoggedInAdministratorFacade GetAdministratorFacade(string username, string password)
