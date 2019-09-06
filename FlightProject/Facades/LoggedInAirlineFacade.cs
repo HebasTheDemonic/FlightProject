@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlightProject.POCOs;
 using FlightProject.Exceptions;
+using System.Data.SqlClient;
 
 namespace FlightProject.Facades
 {
@@ -20,13 +21,18 @@ namespace FlightProject.Facades
             _airlineDAO = new DAOs.AirlineDAOMSSQL();
         }
 
-        public void CancelFlight(LoginToken<AirlineCompany> token, Flight flight)
+        public void CancelFlight(LoginToken<AirlineCompany> token, int flightId)
         {
             if (token.CheckToken())
             {
-                if (_flightDAO.DoesFlightExist(flight.Id) == 1)
+                if (_flightDAO.DoesFlightExistById(flightId) == 1)
                 {
-                    List<Ticket> tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flight);
+                    Flight flight = _flightDAO.Get(flightId);
+                    if(flight.AirlineCompanyId != token.User.Id)
+                    {
+                        throw new UnauthorisedActionException("Cannot cancel flights of other companies.");
+                    }
+                    List<Ticket> tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flightId);
                     foreach (Ticket ticket in tickets)
                     {
                         _ticketDAO.Remove(ticket);
@@ -61,7 +67,7 @@ namespace FlightProject.Facades
         {
             if (token.CheckToken())
             {
-                if (_flightDAO.DoesFlightExist(flight.Id) == 0)
+                if (_flightDAO.DoesFlightExistByData(flight) == 0)
                 {
                     _flightDAO.Add(flight);
                 }
@@ -72,7 +78,7 @@ namespace FlightProject.Facades
             }
         }
 
-        public IList<Flight> GetAllFlights(LoginToken<AirlineCompany> token)
+        public IList<Flight> GetAllFlightsByAirline(LoginToken<AirlineCompany> token)
         {
             List<Flight> allFlightsOfCompany = new List<Flight>();
 
@@ -81,34 +87,31 @@ namespace FlightProject.Facades
                 allFlightsOfCompany = (List<Flight>)_flightDAO.GetFlightsByAirlineCompany(token.User);
             }
 
-            if (allFlightsOfCompany.Count == 0)
-            {
-                throw new NullResultException("Company has no active flights.");
-            }
             return allFlightsOfCompany;
         }
 
-        public IList<Ticket> GetAllTicketsByFlight(LoginToken<AirlineCompany> token, Flight flight)
+        public IList<Ticket> GetAllTicketsByFlight(LoginToken<AirlineCompany> token, int flightId)
         {
             List<Ticket> tickets = new List<Ticket>();
 
             if (token.CheckToken())
             {
-                if(_flightDAO.DoesFlightExist(flight.Id) == 1)
+                if (_flightDAO.DoesFlightExistById(flightId) == 1)
                 {
-                    tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flight);
+                    if (_flightDAO.Get(flightId).AirlineCompanyId == token.User.Id)
+                    {
+                        tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flightId);
+                    }
+                    else
+                    {
+                        throw new UnauthorisedActionException("Cannot see flights of other companies.");
+                    }
                 }
                 else
                 {
                     throw new NullResultException("Flight not found");
                 }
             }
-
-            if (tickets.Count == 0)
-            {
-                throw new NullResultException("No tickets have been bought for this flight.");
-            }
-
             return tickets;
         }
 
@@ -118,9 +121,23 @@ namespace FlightProject.Facades
             {
                 if (token.User.Password == airline.Password)
                 {
-                    airline = new AirlineCompany(token.User.Id, airline.AirlineName, airline.UserName, token.User.Password, airline.OriginCountry);
-                    _airlineDAO.Update(airline);
-                    token.User = airline;
+                    if (token.User.UserName == airline.UserName)
+                    {
+                        try
+                        {
+                            airline = new AirlineCompany(token.User.Id, airline.AirlineName, airline.UserName, token.User.Password, airline.OriginCountry);
+                            _airlineDAO.Update(airline);
+                            token.User = airline;
+                        }
+                        catch (SqlException sqlEx)
+                        {
+                            throw new UnregisteredDataException("Country not Recognized.", sqlEx);
+                        }
+                    }
+                    else
+                    {
+                        throw new UnauthorisedActionException("Usernames cannot be changed.");
+                    }
                 }
                 else
                 {
@@ -129,12 +146,20 @@ namespace FlightProject.Facades
             }
         }
 
-        public void UpdateFlight(LoginToken<AirlineCompany> token, Flight flight)
+        public void UpdateFlight(LoginToken<AirlineCompany> token, int flightId, Flight flight)
         {
             if (token.CheckToken())
             {
-                if (_flightDAO.DoesFlightExist(flight.Id) == 1)
+                
+                if (_flightDAO.DoesFlightExistById(flightId) == 1)
                 {
+                    Flight oldFlightDetails = _flightDAO.Get(flightId);
+                    if (oldFlightDetails.AirlineCompanyId != flight.AirlineCompanyId)
+                    {
+                        throw new UnauthorisedActionException("Cannot make changes to flights of other companies");
+                    }
+                    int newAmount = oldFlightDetails.RemainingTickets + (flight.TotalTickets - oldFlightDetails.TotalTickets);
+                    flight = new Flight(oldFlightDetails.Id, oldFlightDetails.AirlineCompanyId, oldFlightDetails.OriginCountryId, oldFlightDetails.DestinationCountryId, flight.DepartureTime, flight.LandingTime, oldFlightDetails.FlightStatus, flight.TotalTickets, newAmount);
                     _flightDAO.Update(flight);
                 }
                 else
