@@ -33,7 +33,7 @@ namespace FlightProject.POCOs
             TotalTickets = totalTickets;
         }
 
-        public Flight(int id, int airlineCompanyId, int originCountryId, int destinationCountryId, DateTime departureTime, DateTime landingTime, string flightStatus, int totalTickets, int remainingTickets) : this (airlineCompanyId, originCountryId, destinationCountryId, departureTime, landingTime, totalTickets)
+        internal Flight(int id, int airlineCompanyId, int originCountryId, int destinationCountryId, DateTime departureTime, DateTime landingTime, string flightStatus, int totalTickets, int remainingTickets) : this (airlineCompanyId, originCountryId, destinationCountryId, departureTime, landingTime, totalTickets)
         {
             Id = id;
             FlightStatus = flightStatus ?? throw new ArgumentNullException(nameof(flightStatus));
