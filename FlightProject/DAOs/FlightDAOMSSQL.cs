@@ -95,27 +95,82 @@ namespace FlightProject.DAOs
             return result;
         }
 
-        public int DoesFlightExist(int id)
+        public int DoesFlightExistByData(Flight flight)
         {
             int result = 0;
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand();
                 sqlCommand.Connection = connection;
-                sqlCommand.CommandText = "DOES_FLIGHT_EXIST";
+                sqlCommand.CommandText = "DOES_FLIGHT_EXIST_BY_DATA";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
 
-                SqlParameter flightIdParameter = new SqlParameter();
-                flightIdParameter.SqlDbType = SqlDbType.Int;
-                flightIdParameter.SqlValue = id;
-                flightIdParameter.ParameterName = "@ID";
+                SqlParameter originCountryParameter = new SqlParameter();
+                originCountryParameter.SqlDbType = SqlDbType.Int;
+                originCountryParameter.SqlValue = flight.OriginCountryId;
+                originCountryParameter.ParameterName = "@ORIGIN";
+
+                SqlParameter destinationCountryParameter = new SqlParameter();
+                destinationCountryParameter.SqlDbType = SqlDbType.Int;
+                destinationCountryParameter.SqlValue = flight.DestinationCountryId;
+                destinationCountryParameter.ParameterName = "@DESTINATION";
+
+                SqlParameter departureTimeParameter = new SqlParameter();
+                departureTimeParameter.SqlDbType = SqlDbType.DateTime;
+                departureTimeParameter.SqlValue = flight.DepartureTime;
+                departureTimeParameter.ParameterName = "@DEPARTURE";
+
+                SqlParameter landingTimeParameter = new SqlParameter();
+                landingTimeParameter.SqlDbType = SqlDbType.DateTime;
+                landingTimeParameter.SqlValue = flight.LandingTime;
+                landingTimeParameter.ParameterName = "@LANDING";
+
+                SqlParameter airlineIdParameter = new SqlParameter();
+                airlineIdParameter.SqlDbType = SqlDbType.Int;
+                airlineIdParameter.SqlValue = flight.AirlineCompanyId;
+                airlineIdParameter.ParameterName = "@AIRLINE";
 
                 SqlParameter returnValueParameter = new SqlParameter();
                 returnValueParameter.SqlDbType = SqlDbType.Int;
-                returnValueParameter.Direction = ParameterDirection.ReturnValue;
+                returnValueParameter.Direction = ParameterDirection.Output;
                 returnValueParameter.ParameterName = "@VALUE";
 
-                sqlCommand.Parameters.Add(flightIdParameter);
+                sqlCommand.Parameters.Add(originCountryParameter);
+                sqlCommand.Parameters.Add(destinationCountryParameter);
+                sqlCommand.Parameters.Add(departureTimeParameter);
+                sqlCommand.Parameters.Add(landingTimeParameter);
+                sqlCommand.Parameters.Add(airlineIdParameter);
+                sqlCommand.Parameters.Add(returnValueParameter);
+
+                connection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                result = (int)returnValueParameter.Value;
+                connection.Close();
+            }
+            return result;
+        }
+
+        public int DoesFlightExistById(int id)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand();
+                sqlCommand.Connection = connection;
+                sqlCommand.CommandText = "DOES_FLIGHT_EXIST_BY_ID";
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter idParameter = new SqlParameter();
+                idParameter.SqlDbType = SqlDbType.Int;
+                idParameter.SqlValue = id;
+                idParameter.ParameterName = "@ID";
+
+                SqlParameter returnValueParameter = new SqlParameter();
+                returnValueParameter.SqlDbType = SqlDbType.Int;
+                returnValueParameter.Direction = ParameterDirection.Output;
+                returnValueParameter.ParameterName = "@VALUE";
+
+                sqlCommand.Parameters.Add(idParameter);
                 sqlCommand.Parameters.Add(returnValueParameter);
 
                 connection.Open();
@@ -451,6 +506,11 @@ namespace FlightProject.DAOs
                 sqlCommand.CommandText = "UPDATE_FLIGHT";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
 
+                SqlParameter idParameter = new SqlParameter();
+                idParameter.SqlDbType = SqlDbType.Int;
+                idParameter.SqlValue = t.Id;
+                idParameter.ParameterName = "@ID";
+
                 SqlParameter airlineParameter = new SqlParameter();
                 airlineParameter.SqlDbType = SqlDbType.Int;
                 airlineParameter.SqlValue = t.AirlineCompanyId;
@@ -486,6 +546,12 @@ namespace FlightProject.DAOs
                 remainingTicketsParameter.SqlValue = t.RemainingTickets;
                 remainingTicketsParameter.ParameterName = "@REMAINING";
 
+                SqlParameter flightStatusParameter = new SqlParameter();
+                flightStatusParameter.SqlDbType = SqlDbType.Char;
+                flightStatusParameter.SqlValue = t.FlightStatus;
+                flightStatusParameter.ParameterName = "@STATUS";
+
+                sqlCommand.Parameters.Add(idParameter);
                 sqlCommand.Parameters.Add(airlineParameter);
                 sqlCommand.Parameters.Add(originCountryParameter);
                 sqlCommand.Parameters.Add(destinationCountryParameter);
@@ -493,6 +559,7 @@ namespace FlightProject.DAOs
                 sqlCommand.Parameters.Add(landingTimeParameter);
                 sqlCommand.Parameters.Add(totalTicketsParameter);
                 sqlCommand.Parameters.Add(remainingTicketsParameter);
+                sqlCommand.Parameters.Add(flightStatusParameter);
 
                 connection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
