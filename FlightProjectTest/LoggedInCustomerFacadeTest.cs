@@ -51,11 +51,13 @@ namespace FlightProjectTest
         }
 
         [TestMethod]
-        public void GetAllMyFlights_UserHasNoFlights_ThrowsException()
+        public void GetAllMyFlights_UserHasNoFlights_ReturnsNullList()
         {
             LoggedInCustomerFacade customerFacade = GetCustomerFacade("coo", "6542");
 
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<Flight> flights = (List<Flight>)customerFacade.GetAllMyFlights(customerFacade.LoginToken); }));
+            List<Flight> flights = (List<Flight>)customerFacade.GetAllMyFlights(customerFacade.LoginToken);
+
+            Assert.AreEqual(0, flights.Count);
         }
 
         [TestMethod]
