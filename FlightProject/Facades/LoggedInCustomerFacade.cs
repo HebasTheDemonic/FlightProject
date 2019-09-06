@@ -37,15 +37,9 @@ namespace FlightProject.Facades
         public IList<Flight> GetAllMyFlights(LoginToken<Customer> token)
         {
             List<Flight> customerFlights = new List<Flight>();
-
             if (token.CheckToken())
             {
                 customerFlights = (List<Flight>)_flightDAO.GetFlightsByCustomer(token.User);
-            }
-
-            if (customerFlights.Count == 0)
-            {
-                throw new Exceptions.NullResultException("Customer has not ordered flights.");
             }
             return customerFlights;
         }
