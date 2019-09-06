@@ -195,7 +195,7 @@ namespace FlightProject.DAOs
             return tickets;
         }
 
-        public IList<Ticket> GetAllTicketsByFlight(Flight flight)
+        public IList<Ticket> GetAllTicketsByFlight(int flightId)
         {
             List<Ticket> tickets = new List<Ticket>();
 
@@ -208,7 +208,7 @@ namespace FlightProject.DAOs
 
                 SqlParameter flightIdParameter = new SqlParameter();
                 flightIdParameter.SqlDbType = SqlDbType.Int;
-                flightIdParameter.SqlValue = flight.Id;
+                flightIdParameter.SqlValue = flightId;
                 flightIdParameter.ParameterName = "@FLIGHT";
 
 
