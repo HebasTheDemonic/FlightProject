@@ -60,25 +60,32 @@ namespace FlightProject
         {
             int loginValue = 0;
             _genaralDAO = new DAOs.GeneralDAOMSSQL();
-            loginValue = _genaralDAO.DoesUsernameExist(userName);
-            switch (loginValue)
+            loginValue = _genaralDAO.TryLogin(userName);
+            try
             {
-                case 1:
-                    {
-                        return LoginEnum.ADMINISTRATOR;
-                    }
-                case 2:
-                    {
-                        return LoginEnum.AIRLINE;
-                    }
-                case 3:
-                    {
-                        return LoginEnum.CUSTOMER;
-                    }
-                default:
-                    {
-                        throw new UserNotFoundException("Username not found in system");
-                    }
+                switch (loginValue)
+                {
+                    case 1:
+                        {
+                            return LoginEnum.ADMINISTRATOR;
+                        }
+                    case 2:
+                        {
+                            return LoginEnum.AIRLINE;
+                        }
+                    case 3:
+                        {
+                            return LoginEnum.CUSTOMER;
+                        }
+                    default:
+                        {
+                            throw new UserNotFoundException();
+                        }
+                }
+            }
+            catch (InvalidCastException)
+            {
+                throw new UserNotFoundException();
             }
 
         }
