@@ -37,17 +37,6 @@ namespace FlightProjectTest
         }
 
         [TestMethod]
-        public void GetAllFlights_NoRegisteredFlights_ThrowException()
-        {
-            AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
-            flyingCenterSystem.isTestMode = true;
-            flyingCenterSystem.ClearDb();
-            flyingCenterSystem.isTestMode = false;
-
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<Flight> flights = (List<Flight>)userFacade.GetAllFlights(); }));
-        }
-
-        [TestMethod]
         public void GetAirlineCompanies_ReturnsListOfAllAirlineCompanies()
         {
             AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
@@ -59,17 +48,6 @@ namespace FlightProjectTest
             {
                 Assert.IsNotNull(airlineCompany);
             }
-        }
-
-        [TestMethod]
-        public void GetAirlineCompanies_NoRegisteredCompanies_ThrowsException()
-        {
-            AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
-            flyingCenterSystem.isTestMode = true;
-            flyingCenterSystem.ClearDb();
-            flyingCenterSystem.isTestMode = false;
-
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<AirlineCompany> airlineCompanies = (List<AirlineCompany>)userFacade.GetAirlineCompanies(); }));
         }
 
         [TestMethod]
@@ -122,11 +100,13 @@ namespace FlightProjectTest
         }
 
         [TestMethod]
-        public void GetFlightsByOriginCountry_CountryHasNoFlights_ThrowsException()
+        public void GetFlightsByOriginCountry_CountryHasNoFlights_ReturnsNullList()
         {
             AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
 
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<Flight> flights = (List<Flight>)userFacade.GetFlightsByOriginCountry(3); }));
+            List<Flight> flights = (List<Flight>)userFacade.GetFlightsByOriginCountry(3);
+
+            Assert.AreEqual(0, flights.Count);
         }
 
         [TestMethod]
@@ -160,12 +140,14 @@ namespace FlightProjectTest
         }
 
         [TestMethod]
-        public void GetFlightsDepartureDate_NoFlightsOnDate_ThrowsException()
+        public void GetFlightsDepartureDate_NoFlightsOnDate_ReturnsNullList()
         {
             AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
             DateTime dateTime = new DateTime(2019, 10, 10);
 
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<Flight> flights = (List<Flight>)userFacade.GetFlightsByDepartureDate(dateTime); }));
+            List<Flight> flights = (List<Flight>)userFacade.GetFlightsByDepartureDate(dateTime);
+
+            Assert.AreEqual(0, flights.Count);
         }
 
         [TestMethod]
@@ -199,12 +181,14 @@ namespace FlightProjectTest
         }
 
         [TestMethod]
-        public void GetFlightsByLandingDate_NoFlightOnDate_ThrowsException()
+        public void GetFlightsByLandingDate_NoFlightOnDate_ReturnsNullList()
         {
             AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
             DateTime dateTime = new DateTime(2019, 10, 11);
 
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<Flight> flights = (List<Flight>)userFacade.GetFlightsByLandingDate(dateTime); }));
+            List<Flight> flights = (List<Flight>)userFacade.GetFlightsByLandingDate(dateTime);
+
+            Assert.AreEqual(0, flights.Count);
         }
 
         [TestMethod]
@@ -242,7 +226,9 @@ namespace FlightProjectTest
         {
             AnonymousUserFacade userFacade = (AnonymousUserFacade)FlyingCenterSystem.FacadeList[0];
 
-            Assert.ThrowsException<NullResultException>(new Action(() => { List<Flight> flights = (List<Flight>)userFacade.GetFlightsByDestinationCountry(2); }));
+            List<Flight> flights = (List<Flight>)userFacade.GetFlightsByDestinationCountry(2);
+
+            Assert.AreEqual(0, flights.Count);
         }
     }
 }
