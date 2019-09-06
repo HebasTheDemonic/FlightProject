@@ -15,6 +15,5 @@ namespace FlightProject.Facades
         IList<Flight> GetFlightsByOriginCountry(int CountryCode);
         IList<Flight> GetFlightsByDepartureDate(DateTime departureDate);
         IList<Flight> GetFlightsByLandingDate(DateTime landingTime);
-        IList<Flight> GetFlightsByDestinationCountry(int CountryCode);
     }
 }
