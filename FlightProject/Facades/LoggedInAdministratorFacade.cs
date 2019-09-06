@@ -57,6 +57,7 @@ namespace FlightProject.Facades
                     if (_airlineDAO.DoesAirlineCompanyExist(airline) == 0)
                     {
                         _airlineDAO.Add(airline);
+                        return;
                     }
                 }
                 throw new UserAlreadyExistsException();
@@ -72,6 +73,7 @@ namespace FlightProject.Facades
                     if (_customerDAO.DoesCustomerExist(customer) == 0)
                     {
                         _customerDAO.Add(customer);
+                        return;
                     }
                 }
                 throw new UserAlreadyExistsException();
@@ -106,7 +108,7 @@ namespace FlightProject.Facades
                     List<Flight> flights = (List<Flight>)_flightDAO.GetFlightsByAirlineCompany(airline);
                     foreach (Flight flight in flights)
                     {
-                        List<Ticket> tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flight);
+                        List<Ticket> tickets = (List<Ticket>)_ticketDAO.GetAllTicketsByFlight(flight.Id);
                         foreach (Ticket ticket in tickets)
                         {
                             _ticketDAO.Remove(ticket);
