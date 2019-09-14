@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using FlightProject.POCOs;
 using FlightProject.Facades;
 using FlightProject.DAOs;
+using System.Threading;
+using System.Configuration;
 
 namespace FlightProject
 {
     public class FlyingCenterSystem
     {
+        static AutoResetEvent resetEvent = new AutoResetEvent(true);
+
         private static FlyingCenterSystem instance;
         private static object key = new object();
         public string Username { get; set; }
@@ -35,6 +39,29 @@ namespace FlightProject
         {
             FacadeList = new List<FacadeBase>();
             GetFacade();
+            new Thread(FlightCleanerTimer).Start();
+            new Thread(CleanFlightList).Start();
+        }
+
+        private static void FlightCleanerTimer()
+        {
+            Int32.TryParse(ConfigurationManager.AppSettings["HOUR_VALUE"], out int hours);
+            Int32.TryParse(ConfigurationManager.AppSettings["MINUTE_VALUE"], out int minutes);
+            Int32.TryParse(ConfigurationManager.AppSettings["SECOND_VALUE"], out int seconds);
+            TimeSpan timeSpan = new TimeSpan(hours, minutes, seconds);
+            while (true)
+            {
+                Thread.Sleep(timeSpan);
+                resetEvent.Set();
+            }
+
+        }
+
+        private static void CleanFlightList()
+        {
+            resetEvent.WaitOne();
+            HiddenFacade hiddenFacade = new HiddenFacade();
+            hiddenFacade.CleanFlightList();
         }
 
         public int UserLogin()
@@ -77,8 +104,8 @@ namespace FlightProject
         {
             if (isTestMode)
             {
-                GeneralDAOMSSQL generalDAOMSSQL = new GeneralDAOMSSQL();
-                generalDAOMSSQL.DBTestPrep();
+                HiddenFacade hiddenFacade = new HiddenFacade();
+                hiddenFacade.DbTestPrep();
             }
         }
 
@@ -86,8 +113,8 @@ namespace FlightProject
         {
             if (isTestMode)
             {
-                GeneralDAOMSSQL generalDAOMSSQL = new GeneralDAOMSSQL();
-                generalDAOMSSQL.DBClear();
+                HiddenFacade hiddenFacade = new HiddenFacade();
+                hiddenFacade.clearDb();
             }
         }
     }
