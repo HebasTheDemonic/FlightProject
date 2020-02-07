@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using FlightProject.POCOs;
 using FlightProject.Facades;
 using FlightProject.DAOs;
+using System.Threading;
+using System.Configuration;
 
 namespace FlightProject
 {
     public class FlyingCenterSystem
     {
+        static AutoResetEvent resetEvent = new AutoResetEvent(true);
+
         private static FlyingCenterSystem instance;
         private static object key = new object();
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public static List<FacadeBase> FacadeList;
+        public static List<AnonymousUserFacade> FacadeList;
         private static int FacadeListIndex = 0;
         public bool isTestMode = false;
 
@@ -33,13 +35,36 @@ namespace FlightProject
 
         private FlyingCenterSystem()
         {
-            FacadeList = new List<FacadeBase>();
+            FacadeList = new List<AnonymousUserFacade>();
             GetFacade();
+            new Thread(FlightCleanerTimer).Start();
+            new Thread(CleanFlightList).Start();
         }
 
-        public int UserLogin()
+        private static void FlightCleanerTimer()
         {
-            LoginService loginService = new LoginService(Username,Password);
+            Int32.TryParse(ConfigurationManager.AppSettings["HOUR_VALUE"], out int hours);
+            Int32.TryParse(ConfigurationManager.AppSettings["MINUTE_VALUE"], out int minutes);
+            Int32.TryParse(ConfigurationManager.AppSettings["SECOND_VALUE"], out int seconds);
+            TimeSpan timeSpan = new TimeSpan(hours, minutes, seconds);
+            while (true)
+            {
+                Thread.Sleep(timeSpan);
+                resetEvent.Set();
+            }
+
+        }
+
+        private static void CleanFlightList()
+        {
+            resetEvent.WaitOne();
+            HiddenFacade hiddenFacade = new HiddenFacade();
+            hiddenFacade.CleanFlightList();
+        }
+
+        public int UserLogin(string username, string password)
+        {
+            LoginService loginService = new LoginService(username,password);
             return loginService.FacadeIndex;
         }
 
@@ -77,18 +102,15 @@ namespace FlightProject
         {
             if (isTestMode)
             {
-                GeneralDAOMSSQL generalDAOMSSQL = new GeneralDAOMSSQL();
-                generalDAOMSSQL.DBTestPrep();
+                HiddenFacade hiddenFacade = new HiddenFacade();
+                hiddenFacade.DbTestPrep();
             }
         }
 
         public void ClearDb()
         {
-            if (isTestMode)
-            {
-                GeneralDAOMSSQL generalDAOMSSQL = new GeneralDAOMSSQL();
-                generalDAOMSSQL.DBClear();
-            }
+                HiddenFacade hiddenFacade = new HiddenFacade();
+                hiddenFacade.clearDb();
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace FlightProject
+namespace FlightProject.Exceptions
 {
     [Serializable]
     public class WrongPasswordException : Exception

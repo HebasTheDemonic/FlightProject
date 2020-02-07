@@ -14,7 +14,7 @@ namespace FlightProject.DAOs
     {
         public void Add(Country t)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["GCloudConnectionString"].ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand();
                 sqlCommand.Connection = connection;
@@ -37,7 +37,7 @@ namespace FlightProject.DAOs
         public Country Get(int id)
         {
             Country country = new Country();
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["GCloudConnectionString"].ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand();
                 sqlCommand.Connection = connection;
@@ -67,7 +67,7 @@ namespace FlightProject.DAOs
         {
             List<Country> countries = new List<Country>();
 
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["GCloudConnectionString"].ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand();
                 sqlCommand.Connection = connection;
@@ -88,7 +88,7 @@ namespace FlightProject.DAOs
 
         public void Remove(Country t)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["GCloudConnectionString"].ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand();
                 sqlCommand.Connection = connection;
@@ -110,7 +110,7 @@ namespace FlightProject.DAOs
 
         public void Update(Country t)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQLConnectionString"].ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["GCloudConnectionString"].ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand();
                 sqlCommand.Connection = connection;
