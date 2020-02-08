@@ -11,7 +11,7 @@ namespace FlightProject.Facades
 {
     public class LoggedInAdministratorFacade : AnonymousUserFacade, ILoggedInAdministratorFacade
     {
-        public LoginToken<Administrator> LoginToken { get; }
+        public new LoginToken<Administrator> LoginToken { get; }
 
         internal LoggedInAdministratorFacade(LoginToken<Administrator> token)
         {
@@ -23,6 +23,7 @@ namespace FlightProject.Facades
             _ticketDAO = new DAOs.TicketDAOMSSQL();
             _customerDAO = new DAOs.CustomerDAOMSSQL();
             _generalDAO = new DAOs.GeneralDAOMSSQL();
+            _countryDAO = new DAOs.CountryDAOMSSQL();
         }
 
         public void CreateNewAdministrator(LoginToken<Administrator> token, Administrator administrator)
@@ -212,6 +213,51 @@ namespace FlightProject.Facades
                     throw new UnauthorisedActionException("Usernames cannot be changed.");
                 }
                     _customerDAO.Update(customer);
+            }
+        }
+
+        public void CreateCountry(LoginToken<Administrator> token, Country country)
+        {
+            if (token.CheckToken())
+            {
+                try
+                {
+                    _countryDAO.Add(country);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public void UpdateCountry(LoginToken<Administrator> token, Country country)
+        {
+            if (token.CheckToken())
+            {
+                if(country.ID != 0)
+                {
+                    _countryDAO.Update(country);
+                }
+                else
+                {
+                    throw new UnregisteredDataException();
+                }
+            }
+        }
+
+        public void RemoveCountry(LoginToken<Administrator> token, Country country)
+        {
+            if (token.CheckToken())
+            {
+                if(country.ID != 0)
+                {
+                    _countryDAO.Remove(country);
+                }
+                else
+                {
+                    throw new UnregisteredDataException();
+                }
             }
         }
     }
