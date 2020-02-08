@@ -11,7 +11,7 @@ namespace FlightProject.Facades
 {
     public class LoggedInAirlineFacade : AnonymousUserFacade, ILoggedInAirlineFacade
     {
-        public LoginToken<AirlineCompany> LoginToken { get; }
+        public new LoginToken<AirlineCompany> LoginToken { get; }
 
         internal LoggedInAirlineFacade(LoginToken<AirlineCompany> token)
         {
@@ -41,7 +41,7 @@ namespace FlightProject.Facades
                 }
                 else
                 {
-                    throw new NullResultException("Flight not found.");
+                    throw new NullReferenceException("Flight not found.");
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace FlightProject.Facades
                 }
                 else
                 {
-                    throw new NullResultException("Flight not found");
+                    throw new NullReferenceException("Flight not found");
                 }
             }
             return tickets;
@@ -164,7 +164,7 @@ namespace FlightProject.Facades
                 }
                 else
                 {
-                    throw new NullResultException("Flight not found.");
+                    throw new NullReferenceException("Flight not found.");
                 }
             }
         }
