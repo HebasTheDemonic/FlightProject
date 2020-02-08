@@ -17,9 +17,7 @@ namespace FlightProject
 
         private static FlyingCenterSystem instance;
         private static object key = new object();
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public static List<FacadeBase> FacadeList;
+        public static List<AnonymousUserFacade> FacadeList;
         private static int FacadeListIndex = 0;
         public bool isTestMode = false;
 
@@ -37,7 +35,7 @@ namespace FlightProject
 
         private FlyingCenterSystem()
         {
-            FacadeList = new List<FacadeBase>();
+            FacadeList = new List<AnonymousUserFacade>();
             GetFacade();
             new Thread(FlightCleanerTimer).Start();
             new Thread(CleanFlightList).Start();
@@ -55,6 +53,16 @@ namespace FlightProject
                 resetEvent.Set();
             }
 
+<<<<<<< HEAD
+        }
+
+        private static void CleanFlightList()
+        {
+            resetEvent.WaitOne();
+            HiddenFacade hiddenFacade = new HiddenFacade();
+            hiddenFacade.CleanFlightList();
+=======
+>>>>>>> 62807a85e985d18b4f08d83f3533f802794deebb
         }
 
         private static void CleanFlightList()
@@ -64,9 +72,9 @@ namespace FlightProject
             hiddenFacade.CleanFlightList();
         }
 
-        public int UserLogin()
+        public int UserLogin(string username, string password)
         {
-            LoginService loginService = new LoginService(Username,Password);
+            LoginService loginService = new LoginService(username,password);
             return loginService.FacadeIndex;
         }
 
@@ -111,11 +119,16 @@ namespace FlightProject
 
         public void ClearDb()
         {
+<<<<<<< HEAD
             if (isTestMode)
             {
                 HiddenFacade hiddenFacade = new HiddenFacade();
                 hiddenFacade.clearDb();
             }
+=======
+                HiddenFacade hiddenFacade = new HiddenFacade();
+                hiddenFacade.clearDb();
+>>>>>>> 62807a85e985d18b4f08d83f3533f802794deebb
         }
     }
 
