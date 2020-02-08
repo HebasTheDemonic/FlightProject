@@ -12,10 +12,28 @@ namespace FlightProject.Facades
 {
     public class AnonymousUserFacade : FacadeBase, IAnonymousUserFacade
     {
+
+        public LoginToken<User> LoginToken { get; }
+
         internal AnonymousUserFacade()
         {
+            LoginToken = null;
             _airlineDAO = new AirlineDAOMSSQL();
             _flightDAO = new FlightDAOMSSQL();
+            _countryDAO = new CountryDAOMSSQL();
+        }
+
+        public void CreateNewCustomer(Customer customer)
+        {
+            if (_generalDAO.DoesUsernameExist(customer.UserName) == 0)
+            {
+                if (_customerDAO.DoesCustomerExist(customer) == 0)
+                {
+                    _customerDAO.Add(customer);
+                    return;
+                }
+            }
+            throw new UserAlreadyExistsException();
         }
 
         // Returns a list of all airline companies if there is atleast one company in the database.
@@ -34,6 +52,12 @@ namespace FlightProject.Facades
             }
         }
 
+        public IList<Country> GetAllCountries()
+        {
+            List<Country> countries = (List<Country>)_countryDAO.GetAll();
+            return countries;
+        }
+
         // Returns a list of all flights if there is atleast one in the database.
         // If an SQL error is cought throws it up
 
@@ -48,6 +72,12 @@ namespace FlightProject.Facades
             {
                 throw;
             }
+        }
+
+        public Country GetCountryById(int id)
+        {
+            Country country = _countryDAO.Get(id);
+            return country;
         }
 
         // Returns data on a single flight that corresponds to the requested ID.
