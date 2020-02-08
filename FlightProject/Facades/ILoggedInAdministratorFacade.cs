@@ -19,5 +19,8 @@ namespace FlightProject.Facades
         void CreateNewAdministrator(LoginToken<Administrator> token, Administrator administrator);
         void UpdateAdministrator(LoginToken<Administrator> token, Administrator administrator);
         void RemoveAdministrator(LoginToken<Administrator> token, Administrator administrator);
+        void CreateCountry(LoginToken<Administrator> token, Country country);
+        void UpdateCountry(LoginToken<Administrator> token, Country country);
+        void RemoveCountry(LoginToken<Administrator> token, Country country);
     }
 }
